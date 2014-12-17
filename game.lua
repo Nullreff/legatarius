@@ -37,6 +37,13 @@ game.intro = {
 }
 
 game.dialog = {
+    animation = 0,
+    index = 1,
+    text = {
+        "'Wha.... where am I?'",
+        "'How did I get here...?'",
+        "'Why does my head hurt?'"
+    }
 }
 
 function fade_in(start, stop, current, func)
@@ -81,7 +88,15 @@ function game.intro.draw()
     love.graphics.draw(game.assets.background, 0, 0)
 end
 
+game.draw = game.intro.draw
+game.update = game.intro.update
+
 function game.dialog.update(dt)
+    game.dialog.animation = game.dialog.animation + dt
+    if game.dialog.animation >= 5 then
+        game.dialog.animation = 1
+        game.dialog.index = game.dialog.index + 1
+    end
 end
 
 function game.dialog.draw()
@@ -89,10 +104,16 @@ function game.dialog.draw()
     local text_height = 200
     love.graphics.setColor(255, 255, 255)
     love.graphics.draw(game.assets.background, 0, 0)
-    love.graphics.setColor(0, 0, 0, 100)
-    --love.graphics.rectangle('fill', 0, height - text_height, width, text_height)
+    if game.dialog.text[game.dialog.index] then
+        fade_in(0, 1, game.dialog.animation, function(percent)
+            love.graphics.setColor(0, 0, 0, 100 * percent)
+        end)
+        love.graphics.rectangle('fill', 0, height - text_height, width, text_height)
+        love.graphics.setNewFont(30)
+        fade_in(1.5, 2, game.dialog.animation, function(percent)
+            love.graphics.setColor(0, 0, 0, 255 * percent)
+        end)
+        love.graphics.printf(game.dialog.text[game.dialog.index], 10, height - text_height + 10, width - 20, 'left')
+    end
 end
-
-game.draw = game.intro.draw
-game.update = game.intro.update
 
