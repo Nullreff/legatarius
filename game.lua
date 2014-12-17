@@ -1,4 +1,4 @@
--- main.lua - Setup, asset loading and main game loop
+-- game.lua - Gameplay and dialog engine
 --
 -- Copyright (c) 2014, Ryan Mendivil
 -- All rights reserved.
@@ -26,22 +26,12 @@
 -- SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 --
 
-require 'common'
-require 'menu'
-require 'game'
+game = {}
 
-state = {
-    chapter = 1
-}
-
-function load_assets(module)
-    for name, file in pairs(module.assets) do
-        module.assets[name] = love.graphics.newImage('assets/' .. file)
-    end
+function game.draw()
+    local width, height = love.window.getDimensions()
+    love.graphics.setColor(0,0,0)
+    love.graphics.setBackgroundColor(255,255,255)
+    love.graphics.setNewFont(50)
+    love.graphics.printf("Game Started", 0, height / 2 - 100, width, 'center') 
 end
-
-function love.load()
-    load_assets(menu)
-    set_mode(menu)
-end
-

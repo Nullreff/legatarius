@@ -1,4 +1,4 @@
--- main.lua - Setup, asset loading and main game loop
+-- common.lua - Common functions and shared code
 --
 -- Copyright (c) 2014, Ryan Mendivil
 -- All rights reserved.
@@ -26,22 +26,12 @@
 -- SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 --
 
-require 'common'
-require 'menu'
-require 'game'
-
-state = {
-    chapter = 1
-}
-
-function load_assets(module)
-    for name, file in pairs(module.assets) do
-        module.assets[name] = love.graphics.newImage('assets/' .. file)
+function set_mode(module)
+    for i, event in ipairs({'draw', 'update', 'mousepressed'}) do
+        love[event] = module[event]
     end
 end
 
-function love.load()
-    load_assets(menu)
-    set_mode(menu)
+function box_contains(box, x, y)
+    return box.x <= x and box.y <= y and (box.x + box.width) > x and (box.y + box.height) > y
 end
-
