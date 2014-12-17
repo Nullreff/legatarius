@@ -28,10 +28,71 @@
 
 game = {}
 
-function game.draw()
-    local width, height = love.window.getDimensions()
-    love.graphics.setColor(0,0,0)
-    love.graphics.setBackgroundColor(255,255,255)
-    love.graphics.setNewFont(50)
-    love.graphics.printf("Game Started", 0, height / 2 - 100, width, 'center') 
+game.assets = {
+    background = 'chapter1/woods.png'
+}
+
+game.intro = {
+    animation = 0
+}
+
+game.dialog = {
+}
+
+function fade_in(start, stop, current, func)
+    local percent
+    if current <= start then
+        percent = 0
+    elseif current >= stop then
+        percent = 1
+    else
+        percent = (current - start) / (stop - start)
+    end
+    func(percent)
 end
+
+function game.intro.update(dt)
+    game.intro.animation = game.intro.animation + dt
+    if game.intro.animation >= 13 then
+        set_mode(game.dialog)
+    end
+end
+
+function game.intro.draw()
+    local width, height = love.window.getDimensions()
+    love.graphics.setBackgroundColor(0, 0, 0)
+    love.graphics.setNewFont(50)
+    fade_in(2, 4, game.intro.animation, function(percent)
+        love.graphics.setColor(255, 255, 255, 255 * percent)
+    end)
+    love.graphics.printf('Chapter 1:', 0, height / 2 - 100, width, 'center') 
+    love.graphics.setNewFont(90)
+    fade_in(5, 7, game.intro.animation, function(percent)
+        love.graphics.setColor(255, 255, 255, 255 * percent)
+    end)
+    love.graphics.printf('Jamie', 0, height / 2 - 40, width, 'center') 
+    fade_in(9, 10.5, game.intro.animation, function(percent)
+        love.graphics.setColor(0, 0, 0, 255 * percent)
+    end)
+    love.graphics.rectangle('fill', 0, 0, width, height)
+    fade_in(11, 13, game.intro.animation, function(percent)
+        love.graphics.setColor(255, 255, 255, 255 * percent)
+    end)
+    love.graphics.draw(game.assets.background, 0, 0)
+end
+
+function game.dialog.update(dt)
+end
+
+function game.dialog.draw()
+    local width, height = love.window.getDimensions()
+    local text_height = 200
+    love.graphics.setColor(255, 255, 255)
+    love.graphics.draw(game.assets.background, 0, 0)
+    love.graphics.setColor(0, 0, 0, 100)
+    --love.graphics.rectangle('fill', 0, height - text_height, width, text_height)
+end
+
+game.draw = game.intro.draw
+game.update = game.intro.update
+

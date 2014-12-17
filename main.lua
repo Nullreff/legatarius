@@ -42,6 +42,7 @@ end
 
 function love.load()
     load_assets(menu)
+    load_assets(game)
     set_mode(menu)
 end
 

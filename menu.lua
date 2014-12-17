@@ -27,9 +27,10 @@
 --
 
 menu = {}
+
 menu.assets = {
-    background = 'menu_background.png',
-    selected = 'menu_selected.png'
+    background = 'menu/background.png',
+    selected = 'menu/selected.png'
 }
 
 function start_game()
